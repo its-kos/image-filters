@@ -5,62 +5,72 @@ using namespace math;
 
 template <typename T>
 const unsigned int Array2D<T>::getWidth() const {
-	return width;
+	return m_width;
 }
 
 template <typename T>
 const unsigned int Array2D<T>::getHeight() const {
-	return height;
+	return m_height;
 }
 
 template <typename T>
 T* Array2D<T>::getRawDataPtr() {
-	return buffer;
+	return m_buffer;
 }
 
 template <typename T>
-void Array2D<T>::setData(const T* const& data_ptr) {
-	buffer.clear();
-	for (int i = 0; i < width * height; i++) {
-		buffer.push_back(*(data_ptr + i));
+void Array2D<T>::setData(const T* const data_ptr) {
+	m_buffer.clear();
+	for (int i = 0; i < m_width * m_height; i++) {
+		m_buffer.push_back(*(data_ptr + i));
 	}
 }
 
 template <typename T>
-T& Array2D<T>::operator () (unsigned int x, unsigned int y) {
-	return buffer.at(x + y * width);
+T& Array2D<T>::operator() (unsigned int x, unsigned int y) {
+	return m_buffer.at(x + (y * m_width));
 }
 
 template <typename T>
 Array2D<T>::Array2D(unsigned int width, unsigned int height, const T* data_ptr) {
-	this->width = width;
-	this->height = height;
+	m_width = width;
+	m_height = height;
 	if (data_ptr != nullptr) {
 		for (int i = 0; i < (width * height); i++) {
-			buffer.push_back(data_ptr[i]);
+			m_buffer.push_back(data_ptr[i]);
 		}
 	} else {
 		Vec3<float> vector(0);
 		for (int i = 0; i < (width * height); i++) {
-			buffer.push_back(vector);
+			m_buffer.push_back(vector);
 		}
 	}
 }
 
+/*	
+ *	Rule of 3:
+ *	"If you need to explicitly declare either the destructor, 
+ *	copy constructor or copy assignment operator yourself, 
+ *	you probably need to explicitly declare all three of them."
+ */
+
 template <typename T>
 Array2D<T>::Array2D(const Array2D& src) {
-	this->width = src.width;
-	this->height = src.height;
-	setData(src.buffer.data());
+	m_width = src.width;
+	m_height = src.height;
+	setData(src.m_buffer.data());
 }
 
 template <typename T>
 Array2D<T>::~Array2D() {}
 
 template <typename T>
-Array2D<T>& Array2D<T>::operator = (const Array2D<T>& right) {
-	this->width = right.getWidth();
-	this->height = right.getHeight();
-	setData(right.buffer.data());
+Array2D<T>& Array2D<T>::operator= (const Array2D<T>& that) {
+	if (this != &that) {
+		m_width = that.width;
+		m_height = that.height;
+		m_buffer.clear();
+		setData(that.m_buffer.data());
+	}
 	return *this;
 }

@@ -1,75 +1,89 @@
-#include "ppm.h"
 #include <string>
 #include <fstream>
 #include <iostream>
+#include "ppm.h"
 
 namespace image {
 
 	float* ReadPPM(const char* filename, int* w, int* h) {
 
-		int pos;
-		int imageSize;
-		int vals;
-		float* imageArray;
-
-		std::string line;
-		std::ifstream reader;
-		reader.open(filename, std::ios::in | std::ios::binary);
-		reader >> line;
-
+		//	We open the stream that will read the ppm file
+		//	in binary mode.
+		std::ifstream reader(filename, std::ios::in | std::ios::binary);
+		
+		//	Check that file exists - Opened normally
 		if (!reader.is_open()) {
 
 			std::cerr << "Error while opening the file: " << filename << "\n";
 			reader.close();
 			return nullptr;
 
-		}
-		else {
+		} else {
 
+			//	We initialize the needed variables
+			int maxVal;
+			float* imageArray;
+
+			std::string line;
+			reader >> line;
+
+			//	For now only the P6 "Magic Number" (Image format) is supported
 			if (line == "p6" || line == "P6") {
 
 				reader >> *w;
 				reader >> *h;
-				reader >> vals;
+				reader >> maxVal;
 
-				imageSize = 3 * ((*w) * (*h));
+				int totalBytes = 3 * ((*w) * (*h));
 
 				if (reader.fail()) {
-					std::cerr << "Error reading header.\n";
+					std::cerr << "Error reading header\n";
 					reader.close();
 					return nullptr;
 				}
 
 				if (*w < 0 || *h < 0) {
-					std::cerr << "Dimentions are smaller than 0.\n";
+
+					std::cerr << "Dimentions are smaller than 0\n";
 					reader.close();
 					return nullptr;
-				}
-				else if (vals <= 0 || vals > 255) {
-					std::cerr << "Wrong value range (Should be 255).\n";
+
+				} else if (maxVal <= 0 || maxVal > 255) {
+
+					std::cerr << "Wrong value range (Should be 255)\n";
 					reader.close();
 					return nullptr;
+
 				}
 
-				pos = reader.tellg();
-				reader.seekg(pos + 1, 0);
+				/*	Get the position of our input sequence,
+				*	then set the position of the next character to be read
+				*	in our input sequence
+				*/	 
+				reader.seekg((int)reader.tellg() + 1, 0);
 
-				imageArray = new float[imageSize];
-				char* temp = new char[imageSize];
-				reader.read(temp, imageSize);
+				imageArray = new float[totalBytes];
+				char* buffer = new char[totalBytes];
+				reader.read(buffer, totalBytes);
 
-				for (int i = 0; i < imageSize; i++) {
-					imageArray[i] = temp[i] / 255.0f;
+				for (int i = 0; i < totalBytes; i++) {
+					imageArray[i] = buffer[i] / 255.0f;
 				}
 
 				reader.close();
-
-				delete[] temp;
+				delete[] buffer;
 				return imageArray;
 
-			}
-			else {
-				std::cerr << "Wrong Format\n";
+			} else if (line == "p3" || line == "P3") {
+
+				/*	Here we handle P3 format.
+				*	-In P3 images the image is given as ASCII text
+				*	-In P6 images the image data is stored in byte format, 
+				*	one byte per colour component (r,g,b)
+				*/ 
+
+			} else {
+				std::cerr << "Invalid PPM format\n";
 				reader.close();
 				return nullptr;
 			}
@@ -85,8 +99,8 @@ namespace image {
 			std::cerr << "Write process failed \n";
 			writer.close();
 			return false;
-		}
-		else {
+
+		} else {
 			int size = 3 * h * w;
 			char* normalizedData = new char[size];
 

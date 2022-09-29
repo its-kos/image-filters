@@ -9,10 +9,10 @@
 typedef math::Vec3<float> Color;
 
 class Image : public Array2D<Color>, public image::ImageIO {
-
-public:
-	Image(const Image& src);
-	Image(unsigned int width = 0, unsigned int height = 0);
-	bool load(const std::string& filename, const std::string& format);
-	bool save(const std::string& filename, const std::string& format);
+	public:
+		Image();
+		Image(unsigned int width, unsigned int height, const Color* data_ptr);
+		Image(const Image& src);
+		bool load(const std::string& filename, const std::string& format);
+		bool save(const std::string& filename, const std::string& format);
 };
