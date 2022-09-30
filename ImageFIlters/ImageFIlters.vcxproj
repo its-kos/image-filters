@@ -86,7 +86,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="array2d.h" />
-    <ClInclude Include="array2d.hpp" />
     <ClInclude Include="filter.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="imageio.h" />

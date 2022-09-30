@@ -18,7 +18,6 @@ Image::Image(unsigned int width, unsigned int height, const Color* data_ptr) : A
 Image::Image(const Image& src) : Array2D<Color>(src) {}
 
 bool Image::load(const std::string& filename, const std::string& format) {
-
 	if (format == "ppm") {
 
 		int m_width, m_height;
@@ -29,7 +28,7 @@ bool Image::load(const std::string& filename, const std::string& format) {
 		}
 
 		m_buffer.clear();
-		for (int i = 0; i < m_width * m_height * 3; i += 3) {
+		for (int i = 0; i < m_width * m_height; i += 3) {
 			Color c(im_p[i], im_p[i + 1], im_p[i + 2]);
 			m_buffer.push_back(c);
 		}
@@ -44,12 +43,11 @@ bool Image::load(const std::string& filename, const std::string& format) {
 }
 
 bool Image::save(const std::string& filename, const std::string& format) {
-	const char* path = filename.c_str();
 	if (format == "ppm") {
-		return image::WritePPM((float*)m_buffer.data(), m_width, m_height, path);
+		return image::WritePPM(filename.c_str(), m_width, m_height, (float*)m_buffer.data());
 	}
 	else {
-		std::cout << "Only the ppm image format is supported for now. \n";
+		std::cout << "Only ppm image formats are supported for now. \n";
 		return false;
 	}
 }

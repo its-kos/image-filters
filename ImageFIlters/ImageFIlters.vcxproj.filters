@@ -30,9 +30,6 @@
     <ClInclude Include="vec3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="array2d.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="filter.cpp">

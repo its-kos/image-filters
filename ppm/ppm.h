@@ -27,5 +27,5 @@ namespace image {
 	 *	\return true if the image save operation was successful, false otherwise. If the data parameter is nulltr, the
 	 *	function returns immediately with a false return value.
 	 */
-	bool WritePPM(const float* data, int w, int h, const char* filename);
+	bool WritePPM(const char* filename, int w, int h, const float* data);
 }
