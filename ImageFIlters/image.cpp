@@ -45,8 +45,7 @@ bool Image::load(const std::string& filename, const std::string& format) {
 bool Image::save(const std::string& filename, const std::string& format) {
 	if (format == "ppm") {
 		return image::WritePPM(filename.c_str(), m_width, m_height, (float*)m_buffer.data());
-	}
-	else {
+	} else {
 		std::cout << "Only ppm image formats are supported for now. \n";
 		return false;
 	}
