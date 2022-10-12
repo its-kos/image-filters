@@ -16,6 +16,7 @@
     <ProjectGuid>{d8898e72-865f-43b9-9fac-d60d81e98ccf}</ProjectGuid>
     <RootNamespace>ImageFIlters</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>ImageFilters</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
